@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "959386352278",
+    "project_id": "helthcare-c39a0",
+    "storage_bucket": "helthcare-c39a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959386352278:android:ca49c3f2766a13bf58a0b7",
+        "android_client_info": {
+          "package_name": "com.example.helth_care_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959386352278-ltq2jccth4mvkahv3uk06jmj4jerd6tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7LlX_wQKHZTSkDNENbOhXu9tL-xNnGds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959386352278-ltq2jccth4mvkahv3uk06jmj4jerd6tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "959386352278-a3hr4f222moabf0ci6si7sl3ma6agehb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helthCareDoctor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959386352278:android:65a198f852b2e17358a0b7",
+        "android_client_info": {
+          "package_name": "com.example.helth_care_doctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959386352278-ltq2jccth4mvkahv3uk06jmj4jerd6tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7LlX_wQKHZTSkDNENbOhXu9tL-xNnGds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959386352278-ltq2jccth4mvkahv3uk06jmj4jerd6tv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "959386352278-a3hr4f222moabf0ci6si7sl3ma6agehb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helthCareDoctor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
