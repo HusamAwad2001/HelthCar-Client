@@ -52,6 +52,8 @@ dependencies:
   video_player: ^2.6.1
   file_picker: ^5.2.11
   chewie: ^1.0.0
+  modal_progress_hud_nsn:
+  flutter_chat_bubble: ^2.0.0
 
 dev_dependencies:
   flutter_test:

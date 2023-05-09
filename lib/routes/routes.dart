@@ -6,4 +6,5 @@ class Routes {
   static const String patentsNavigationScreen = '/PatentsNavigationScreen';
   static const String homeScreen = '/HomeScreen';
   static const String topicDetailsScreen = '/TopicDetailsScreen';
+  static const String chatScreen = '/ChatScreen';
 }

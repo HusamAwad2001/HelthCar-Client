@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:helth_care_client/controllers/navigation_controller.dart';
 import 'package:helth_care_client/services/fb_auth_controller.dart';
-import 'package:helth_care_client/view/widgets/snack.dart';
 
 import '../models/app_user.dart';
+import '../models/chat_message.dart';
 import '../models/chat_user.dart';
 import '../models/topic_model.dart';
-import '../routes/routes.dart';
 import '../view/widgets/loading_dialog.dart';
 
 class FirestoreHelper {
@@ -46,23 +44,6 @@ class FirestoreHelper {
     return [];
   }
 
-  /// Add_New_Topic
-  Future<void> addNewTopic(TopicModel topic) async {
-    try {
-      await firebaseFirestore.collection('topics').add({
-        'id': '',
-        'title': topic.title,
-        'description': topic.description,
-        'image': topic.image,
-        'information': topic.information,
-        'infoType': topic.infoType,
-      });
-      Get.offAllNamed(Routes.navigationScreen);
-    } catch (e) {
-      Snack().show(type: false, message: e.toString());
-    }
-  }
-
   /// Delete_One_Topic
   Future<void> deleteTopic(TopicModel topic) async {
     await firebaseFirestore.collection('topics').doc(topic.id).delete();
@@ -92,5 +73,39 @@ class FirestoreHelper {
           (element) => element.id == FbAuthController().getCurrentUser(),
     );
     return users;
+  }
+
+  sendMessage(ChatMessage message, String otherUserId) async {
+    String collectionId = getChatId(otherUserId);
+    firebaseFirestore
+        .collection('chats')
+        .doc(collectionId)
+        .collection('messages')
+        .add(message.toMap());
+  }
+
+  String getChatId(String otherId) {
+    String myId = FbAuthController().getCurrentUser();
+    int myHashCode = myId.hashCode;
+    int otherHashCode = otherId.hashCode;
+    String collectionId =
+    myHashCode > otherHashCode ? '$myId$otherId' : '$otherId$myId';
+    return collectionId;
+  }
+
+  Stream<List<ChatMessage>> getAllChatMessage(String otherUserId) {
+    String collectionId = getChatId(otherUserId);
+    Stream<QuerySnapshot<Map<String, dynamic>>> stream = firebaseFirestore
+        .collection('chats')
+        .doc(collectionId)
+        .collection('messages')
+        .orderBy('time')
+        .snapshots();
+    return stream.map((event) {
+      List<ChatMessage> messages = event.docs.map((e) {
+        return ChatMessage.fromMap(e.data());
+      }).toList();
+      return messages;
+    });
   }
 }

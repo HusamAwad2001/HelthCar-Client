@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:helth_care_client/controllers/navigation_controller.dart';
+import 'package:helth_care_client/routes/routes.dart';
+import 'package:helth_care_client/view/screens/chat_message_screen.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -16,7 +18,10 @@ class ChatScreen extends StatelessWidget {
           separatorBuilder: (context, index) => const SizedBox(height: 20),
           itemBuilder: (context, index) {
             return ListTile(
-              onTap: () {},
+              onTap: () => Get.toNamed(
+                Routes.chatScreen,
+                arguments: controller.chatDoctors[index],
+              ),
               leading: const Icon(
                 Icons.account_circle_rounded,
                 size: 45,
