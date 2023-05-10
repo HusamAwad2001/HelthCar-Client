@@ -9,4 +9,5 @@ class Global {
 
   static bool isLogged = false;
   static Map user = {};
+  static String deviceToken = '';
 }

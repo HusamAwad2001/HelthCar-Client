@@ -8,10 +8,13 @@ import '../models/chat_message.dart';
 import '../models/chat_user.dart';
 import '../models/topic_model.dart';
 import '../view/widgets/loading_dialog.dart';
+import '../view/widgets/snack.dart';
 
 class FirestoreHelper {
   static FirestoreHelper fireStoreHelper = FirestoreHelper();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  /// ----------------------------------------------------------------------
 
   Future<void> addUserToFirestore(AppUser appUser) async {
     LoadingDialog().dialog();
@@ -22,11 +25,16 @@ class FirestoreHelper {
     Get.back();
   }
 
+  /// ----------------------------------------------------------------------
+
   /// Get_All_Topics
   Future<List<TopicModel>> getAllTopics() async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await firebaseFirestore.collection('topics').get();
+          await firebaseFirestore
+              .collection('topics')
+              .where('hidden', isEqualTo: false)
+              .get();
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
           querySnapshot.docs;
       List<TopicModel>? topics = documents.map((e) {
@@ -46,8 +54,68 @@ class FirestoreHelper {
 
   /// Delete_One_Topic
   Future<void> deleteTopic(TopicModel topic) async {
-    await firebaseFirestore.collection('topics').doc(topic.id).delete();
+    try {
+      await firebaseFirestore.collection('topics').doc(topic.id).delete();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
   }
+
+  /// Subscribe_To_Topic
+  Future<void> subscribeToTopic(TopicModel topic, String deviceToken) async {
+    try {
+      await firebaseFirestore
+          .collection('topics')
+          .doc(topic.id)
+          .collection('subscriptions')
+          .doc(FbAuthController().getCurrentUser())
+          .set({
+        'uid': FbAuthController().getCurrentUser(),
+        'deviceToken': deviceToken,
+      });
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
+  }
+
+  /// Subscribe_To_Topic
+  Future<void> unSubscribeToTopic(TopicModel topic) async {
+    try {
+      await firebaseFirestore
+          .collection('topics')
+          .doc(topic.id)
+          .collection('subscriptions')
+          .doc(FbAuthController().getCurrentUser())
+          .delete();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
+  }
+
+  /// Update_isSubscribe_Topic
+  Future<bool> updateHiddenTopic(String topicId, bool isSubscribe) async {
+    try {
+      await firebaseFirestore
+          .collection('topics')
+          .doc(topicId)
+          .update({'isSubscribe': isSubscribe});
+      return true;
+    } catch (e) {
+      Snack().show(type: false, message: e.toString());
+      return false;
+    }
+  }
+
+  /// ----------------------------------------------------------------------
 
   /// Get_All_Doctors
   Future<List<ChatUser>> getAllDoctors() async {
@@ -65,15 +133,17 @@ class FirestoreHelper {
   /// Get_All_Clients
   Future<List<ChatUser>> getAllClients() async {
     QuerySnapshot<Map<String, dynamic>> results =
-    await firebaseFirestore.collection('clients').get();
+        await firebaseFirestore.collection('clients').get();
     List<ChatUser> users = results.docs.map((e) {
       return ChatUser.fromMap(e.data());
     }).toList();
     users.removeWhere(
-          (element) => element.id == FbAuthController().getCurrentUser(),
+      (element) => element.id == FbAuthController().getCurrentUser(),
     );
     return users;
   }
+
+  /// ----------------------------------------------------------------------
 
   sendMessage(ChatMessage message, String otherUserId) async {
     String collectionId = getChatId(otherUserId);
@@ -89,7 +159,7 @@ class FirestoreHelper {
     int myHashCode = myId.hashCode;
     int otherHashCode = otherId.hashCode;
     String collectionId =
-    myHashCode > otherHashCode ? '$myId$otherId' : '$otherId$myId';
+        myHashCode > otherHashCode ? '$myId$otherId' : '$otherId$myId';
     return collectionId;
   }
 
@@ -108,4 +178,6 @@ class FirestoreHelper {
       return messages;
     });
   }
+
+  /// ----------------------------------------------------------------------
 }

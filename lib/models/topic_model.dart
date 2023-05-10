@@ -5,6 +5,7 @@ class TopicModel {
   String image;
   String information;
   String infoType;
+  bool isSubscribe;
 
   TopicModel({
     this.id,
@@ -13,6 +14,7 @@ class TopicModel {
     required this.image,
     required this.information,
     required this.infoType,
+    required this.isSubscribe,
   });
 
 
@@ -24,6 +26,7 @@ class TopicModel {
       image: json["image"],
       information: json["information"],
       infoType: json["infoType"],
+      isSubscribe: json["isSubscribe"],
     );
   }
 
@@ -35,6 +38,7 @@ class TopicModel {
       "image": image,
       "information": information,
       "infoType": infoType,
+      "isSubscribe": isSubscribe,
     };
   }
 }

@@ -18,5 +18,8 @@ class Storage {
     if (instance.hasData('isLogged')) {
       Global.isLogged = instance.read('isLogged');
     }
+    if (instance.hasData('deviceToken')) {
+      Global.deviceToken = instance.read('deviceToken');
+    }
   }
 }

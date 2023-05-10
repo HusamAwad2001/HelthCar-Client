@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:helth_care_client/constants/constants.dart';
 import 'package:helth_care_client/controllers/navigation_controller.dart';
+import 'package:helth_care_client/services/fbNotifications.dart';
+import 'package:helth_care_client/services/fb_auth_controller.dart';
 
 import '../../../../routes/routes.dart';
 import '../../widgets/empty_list.dart';
@@ -81,6 +83,7 @@ class HomeScreen extends GetView<NavigationController> {
                               },
                               itemBuilder: (context, index) {
                                 final item = controller.topics[index];
+                                controller.isSubscribe = item.isSubscribe;
                                 return GestureDetector(
                                   onTap: () {
                                     Get.toNamed(
@@ -130,11 +133,29 @@ class HomeScreen extends GetView<NavigationController> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           GestureDetector(
-                                            onTap: () {},
-                                            child: const Icon(
-                                              Icons.subscriptions_outlined,
-                                              color: primaryColor,
-                                            ),
+                                            onTap: () {
+                                              controller.isSubscribe
+                                                  ? controller.unSubscribeToTopic(
+                                                      controller.filteredTopics.isEmpty
+                                                          ? controller.topics[index]
+                                                          : controller.filteredTopics[index],
+                                                    )
+                                                  : controller.subscribeToTopic(
+                                                      controller.filteredTopics.isEmpty
+                                                          ? controller.topics[index]
+                                                          : controller.filteredTopics[index],
+                                                    );
+                                            },
+                                            child: controller.isSubscribe
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: primaryColor,
+                                                  )
+                                                : const Icon(
+                                                    Icons
+                                                        .subscriptions_outlined,
+                                                    color: primaryColor,
+                                                  ),
                                           ),
                                           const SizedBox(width: 10),
                                           GestureDetector(
