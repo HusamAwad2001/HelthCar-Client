@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:helth_care_client/core/storage.dart';
 import 'package:helth_care_client/services/fbNotifications.dart';
+import 'package:helth_care_client/services/fb_auth_controller.dart';
+import 'package:helth_care_client/services/firestore_helper.dart';
 import '../constants/constants.dart';
 import '../firebase_options.dart';
 import '../routes/pages.dart';
@@ -20,7 +22,9 @@ void main() async {
   await FbNotifications().getDeviceToken().then((value) async{
     await Storage.instance.write('deviceToken', value);
   });
+  await FirestoreHelper.fireStoreHelper.getClientInfoById();
   Storage.getData();
+  print(Global.user);
   runApp(const MyApp());
 }
 

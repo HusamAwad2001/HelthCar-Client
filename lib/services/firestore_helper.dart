@@ -3,6 +3,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:helth_care_client/services/fb_auth_controller.dart';
 
+import '../core/global.dart';
+import '../core/storage.dart';
 import '../models/app_user.dart';
 import '../models/chat_message.dart';
 import '../models/chat_user.dart';
@@ -75,6 +77,9 @@ class FirestoreHelper {
           .set({
         'uid': FbAuthController().getCurrentUser(),
         'deviceToken': deviceToken,
+        'name': '${Global.user['firstName']} ${Global.user['secondName']} ${Global.user['familyName']}',
+        'phone': '${Global.user['phone']}',
+        'email': '${Global.user['email']}',
       });
     } catch (e) {
       Fluttertoast.showToast(
@@ -180,4 +185,44 @@ class FirestoreHelper {
   }
 
   /// ----------------------------------------------------------------------
+
+  getClientInfoById() async{
+    try {
+      DocumentSnapshot<Map<String, dynamic>> document =  await firebaseFirestore
+          .collection('clients')
+          .doc(FbAuthController().getCurrentUser())
+          .get();
+      await Storage.instance.write('user', document.data()!);
+      Storage.getData();
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
+  }
+
+  /// ----------------------------------------------------------------------
+
+  /// Add_View
+  Future<void> addView(TopicModel topic) async {
+    try {
+      await firebaseFirestore
+          .collection('topics')
+          .doc(topic.id)
+          .collection('views')
+          .doc(FbAuthController().getCurrentUser())
+          .set({
+        'uid': FbAuthController().getCurrentUser(),
+        'name': '${Global.user['firstName']} ${Global.user['secondName']} ${Global.user['familyName']}',
+        'phone': '${Global.user['phone']}',
+        'email': '${Global.user['email']}',
+      });
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
+  }
 }
