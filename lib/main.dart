@@ -19,12 +19,7 @@ void main() async {
   );
   await GetStorage.init();
   await FbNotifications.init();
-  await FbNotifications().getDeviceToken().then((value) async{
-    await Storage.instance.write('deviceToken', value);
-  });
-  await FirestoreHelper.fireStoreHelper.getClientInfoById();
   Storage.getData();
-  print(Global.user);
   runApp(const MyApp());
 }
 

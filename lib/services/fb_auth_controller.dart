@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../core/global.dart';
+import '../core/storage.dart';
 import '../models/chat_user.dart';
+import '../routes/routes.dart';
 import '../view/widgets/loading_dialog.dart';
+import '../view/widgets/snack.dart';
 
 class FbAuthController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,22 +32,51 @@ class FbAuthController {
   }
 
   /// SIGN-IN
-  Future<bool> signIn({required String email, required String password}) async {
+  Future<bool> signIn({
+    required String email,
+    required String password,
+    required String firstName,
+    required String secondName,
+    required String familyName,
+    required String phone,
+    required String address,
+    required String birthDate,
+    required String typeOfInAccount,
+  }) async {
     LoadingDialog().dialog();
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      await _auth
+          .signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      Get.back();
+      Snack().show(type: true, message: 'تم تسجيل الدخول بنجاح');
+      Global.isLogged = true;
+      Global.user = {
+        'id': FbAuthController().getCurrentUser(),
+        'firstName': firstName.trim(),
+        'secondName': secondName.trim(),
+        'familyName': familyName.trim(),
+        'email': email.trim(),
+        'phone': phone..trim(),
+        'address': address..trim(),
+        'birthDate': birthDate..trim(),
+        'password': password.trim(),
+        'typeOfInAccount': typeOfInAccount,
+      };
+      Storage.instance.write("isLogged", Global.isLogged);
+      Storage.instance.write("user", Global.user);
+      Get.offAllNamed(Routes.patentsNavigationScreen);
+      print('Routes.patentsNavigationScreen');
+      print(Global.user);
       return true;
     } on FirebaseAuthException catch (e) {
       Get.back();
-      Get.snackbar(
-        'Error',
-        e.message ?? 'Something went wrong, try again!',
-        backgroundColor: Colors.red,
-      );
+      // Get.snackbar(
+      //   'Error',
+      //   e.message ?? 'Something went wrong, try again!',
+      //   backgroundColor: Colors.red,
+      // );
       _controllerExceptionCode(e.code);
     } catch (e) {
       print(e);

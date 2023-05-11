@@ -27,32 +27,18 @@ class AuthController extends GetxController {
 
   void login() async {
     FocusManager.instance.primaryFocus?.unfocus();
-    await FbAuthController()
-        .signIn(
+    await FbAuthController().signIn(
       email: loginEmailController.text.trim(),
       password: loginPasswordController.text.trim(),
-    )
-        .then((value) {
+      address: addressController.text.trim(),
+      birthDate: birthDateController.text.trim(),
+      phone: phoneController.text.trim(),
+      typeOfInAccount: typeOfInAccount,
+      firstName: firstNameController.text.trim(),
+      secondName: secondNameController.text.trim(),
+      familyName: familyNameController.text.trim(),
+    ).then((value) {
       clear();
-      Snack().show(type: true, message: 'تم تسجيل الدخول بنجاح');
-      Global.isLogged = true;
-      Global.user = {
-        'firstName': firstNameController.text.trim(),
-        'secondName': secondNameController.text.trim(),
-        'familyName': familyNameController.text.trim(),
-        'email': emailController.text.trim(),
-        'phone': phoneController.text.trim(),
-        'address': addressController.text.trim(),
-        'birthDate': birthDateController.text.trim(),
-        'password': passwordController.text.trim(),
-        'typeOfInAccount': typeOfInAccount,
-      };
-      Storage.instance.write("isLogged", Global.isLogged);
-      Storage.instance.write("user", Global.user);
-      // Global.user['typeOfInAccount'] == 'doctor'
-      //     ? Get.offAllNamed(Routes.navigationScreen)
-      //     : Get.offAllNamed(Routes.patentsNavigationScreen);
-      Get.offAllNamed(Routes.patentsNavigationScreen);
     });
     update();
   }

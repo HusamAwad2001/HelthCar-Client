@@ -16,11 +16,21 @@ class NavigationController extends GetxController {
 
   @override
   void onInit() {
+    ss();
     getAllTopics();
     getAllDoctors();
     getAllClients();
     deviceToken = Global.deviceToken;
     super.onInit();
+  }
+
+  ss()async{
+    await FbNotifications().getDeviceToken().then((value) async{
+      await Storage.instance.write('deviceToken', value);
+    });
+    await FirestoreHelper.fireStoreHelper.getClientInfoById();
+    Storage.getData();
+    print(Global.user);
   }
 
   int selectedIndex = 0;
