@@ -217,6 +217,7 @@ class FirestoreHelper {
         'name': '${Global.user['firstName']} ${Global.user['secondName']} ${Global.user['familyName']}',
         'phone': '${Global.user['phone']}',
         'email': '${Global.user['email']}',
+        'dateTime': DateTime.now().toString(),
       });
     } catch (e) {
       Fluttertoast.showToast(
