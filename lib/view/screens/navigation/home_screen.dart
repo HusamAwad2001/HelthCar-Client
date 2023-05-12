@@ -10,6 +10,7 @@ import 'package:helth_care_client/services/fb_auth_controller.dart';
 import 'package:helth_care_client/view/widgets/snack.dart';
 
 import '../../../../routes/routes.dart';
+import '../../../constants/ads/ads_controller.dart';
 import '../../widgets/empty_list.dart';
 
 class HomeScreen extends GetView<NavigationController> {
@@ -17,6 +18,7 @@ class HomeScreen extends GetView<NavigationController> {
 
   @override
   Widget build(BuildContext context) {
+    AdsController adsController = Get.put(AdsController());
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -179,6 +181,7 @@ class HomeScreen extends GetView<NavigationController> {
             },
           ),
         ),
+        adsController.bannerAdWidget(),
       ],
     ).paddingSymmetric(horizontal: 10);
   }

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:helth_care_client/constants/ads/ads_controller.dart';
 import 'package:helth_care_client/core/storage.dart';
 import 'package:helth_care_client/services/fbNotifications.dart';
 import 'package:helth_care_client/services/fb_auth_controller.dart';
@@ -20,6 +21,8 @@ void main() async {
   await GetStorage.init();
   await FbNotifications.init();
   Storage.getData();
+  AdsController c = Get.put(AdsController());
+  await c.initGoogleAds();
   runApp(const MyApp());
 }
 
